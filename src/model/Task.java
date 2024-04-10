@@ -8,15 +8,6 @@ public class Task {
     protected Status status;
     protected String description;
 
-    public Task() {
-    }
-
-    public Task(int id, String name, Status status, String description) {
-        this.id = id;
-        this.name = name;
-        this.status = status;
-        this.description = description;
-    }
 
     public Task(String name, Status status, String description) {
         this.name = name;
@@ -55,6 +46,7 @@ public class Task {
     public void setDescription(String description) {
         this.description = description;
     }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
