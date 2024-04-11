@@ -6,21 +6,18 @@ import java.util.List;
 public class Epic extends Task {
     private final List<Integer> subTasks = new ArrayList<>();
 
-
-    public Epic(String name, String description, Status status) {
+    public Epic(String name, String description) {
         super(name, Status.NEW, description);
     }
-
+    public void removeSubTasks(Integer id) {
+        subTasks.remove(id);
+    }
     public List<Integer> getIdSubTasks() {
         return subTasks;
     }
 
     public void addSubTasks(int id) {
         subTasks.add(id);
-    }
-
-    public void removeSubTasks(int id) {
-        subTasks.remove(id);
     }
 
     public void clearSubTasks() {

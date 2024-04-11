@@ -17,41 +17,40 @@ public class Main {
         taskManager.create(task2);
         System.out.println("Create task 2: " + task2);
 
-        Epic epic1 = new Epic("Пойти за покупками", "Пойти в пятерку", Status.NEW);
+        Epic epic1 = new Epic("Пойти за покупками", "Пойти в пятерку");
         taskManager.createEpic(epic1);
         System.out.println("Create epic 1: " + taskManager.getEpicById(epic1.getId()));
 
-        SubTask subTask1 = new SubTask("Купить лук", Status.NEW, "Проверить на свежесть", epic1);
+        SubTask subTask1 = new SubTask("Купить лук", Status.NEW, "Проверить на свежесть", epic1.getId());
         taskManager.createSubTask(subTask1);
         System.out.println("Create subtask1: " + subTask1);
         System.out.println("Create epic 1 - subtask 1: " + epic1);
 
-        SubTask subTask2 = new SubTask("Купить молоко", Status.IN_PROGRESS, "Сверить дату", epic1);
+        SubTask subTask2 = new SubTask("Купить молоко", Status.IN_PROGRESS, "Сверить дату", epic1.getId());
         taskManager.createSubTask(subTask2);
         System.out.println("Create subtask2: " + subTask2);
         System.out.println("Create epic 1 - subtask 2: " + epic1);
 //
-        Epic epic2 = new Epic("Погулять", "Не забыть взять зонт", Status.NEW);
+        Epic epic2 = new Epic("Погулять", "Не забыть взять зонт");
         taskManager.createEpic(epic2);
         System.out.println("Create epic 2: " + epic2);
         taskManager.updateEpic(epic2);
         System.out.println("Update epic 2: " + taskManager.getEpicById(epic2.getId()));
 
 
-        SubTask subTask3 = new SubTask("Купить билет", Status.DONE, "В кассе", epic1);
+        SubTask subTask3 = new SubTask("Купить билет", Status.DONE, "В кассе", epic1.getId());
         taskManager.createSubTask(subTask3);
-        System.out.println("Create 04: " + subTask3);
-        System.out.println("Create 4.1: " + epic2);
+        System.out.println(taskManager.getAllSubTaskByEpicId(epic1.getId())); ;
         System.out.println("Status: " + taskManager.getEpicById((epic1.getId())));
         taskManager.removeSubTaskById(subTask3.getId());
         System.out.println("Status: " + taskManager.getEpicById((epic1.getId())));
         taskManager.removeEpicById(epic2.getId());
         System.out.println("Result: " + taskManager.getEpicById(epic2.getId()));
         System.out.println("Result: " + taskManager.getSubTaskById(subTask3.getId()));
-        subTask3 = new SubTask("Купить хомяка", Status.NEW, "Толстого", epic2);
+        subTask3 = new SubTask("Купить хомяка", Status.NEW, "Толстого", epic2.getId());
         taskManager.updateSubTask(subTask3);
         System.out.println("Update subTask" + subTask3);
-        taskManager.clearSubTasks(epic2);
+        taskManager.clearSubTasks();
         System.out.println(taskManager.getAllSubTask());
         taskManager.clearEpic();
         System.out.println(taskManager.getAllEpics());
