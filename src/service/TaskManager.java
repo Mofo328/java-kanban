@@ -9,6 +9,7 @@ import java.util.List;
 public interface TaskManager {
 
     List<Task> getHistory();
+
     Task create(Task task);
 
     void deleteById(int id);

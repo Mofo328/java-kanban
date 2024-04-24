@@ -133,6 +133,4 @@ class InMemoryTaskManagerTest {
         boolean subTaskIsEmpty = taskManager.getAllSubTaskByEpicId(1).isEmpty();
         assertFalse(subTaskIsEmpty);
     }
-
-
 }
