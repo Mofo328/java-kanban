@@ -14,5 +14,4 @@ class TaskTest {
         task2.setId(1);
         assertEquals(task1, task2);
     }
-
 }

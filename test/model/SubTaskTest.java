@@ -14,5 +14,4 @@ class SubTaskTest {
         subTask1.setId(1);
         assertEquals(subTask, subTask1);
     }
-
 }
