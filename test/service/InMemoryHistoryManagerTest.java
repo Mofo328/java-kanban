@@ -13,7 +13,7 @@ class InMemoryHistoryManagerTest {
     private HistoryManager historyManager;
 
     @BeforeEach
-    public void addTask() {
+    public void BeforeEach() {
         historyManager = Managers.getDefaultHistory();
     }
 
@@ -22,8 +22,8 @@ class InMemoryHistoryManagerTest {
         Task task = new Task("Имя", Status.NEW, "Описание");
         historyManager.addTaskToHistory(task);
         List<Task> history = historyManager.getHistory();
-        boolean empty = history.isEmpty();
-        assertFalse(empty);
+        assertEquals(1, history.size());
+        assertEquals(task, history.getFirst());
     }
 
     @Test
@@ -33,9 +33,7 @@ class InMemoryHistoryManagerTest {
             Task task = new Task("Имя", Status.NEW, "Описание");
             historyManager.addTaskToHistory(task);
         }
-        boolean isSizeLimitCorrect = history.size() == 9;
-        System.out.println(history.size());
-        assertTrue(isSizeLimitCorrect);
+        assertEquals(10, history.size());
     }
 
     @Test
