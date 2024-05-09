@@ -1,11 +1,14 @@
 package service;
 
 
+import model.Epic;
+import model.SubTask;
 import model.Task;
 import model.Status;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -24,31 +27,91 @@ class InMemoryHistoryManagerTest {
         Task task = new Task("Имя", Status.NEW, "Описание");
         historyManager.addTaskToHistory(task);
         List<Task> tasksHistory = historyManager.getHistory();
-        assertEquals(1, tasksHistory.size());
-        assertEquals(task, tasksHistory.getFirst());
+        assertEquals(1, tasksHistory.size(), "History not add");
+        assertEquals(task, tasksHistory.getFirst(), "History add,not correct");
     }
 
     @Test
-    public void shouldBeInMemoryHistoryManagerSizeHaveLimitBy10() {
-        for (int i = 0; i < 13; i++) {
-            Task task = new Task("Имя", Status.NEW, "Описание");
-            historyManager.addTaskToHistory(task);
-        }
-        List<Task> history = historyManager.getHistory();
-        assertEquals(10, history.size());
+    public void historyEmpty() {
+        assertEquals(Collections.emptyList(), historyManager.getHistory(), "History not empty");
     }
 
     @Test
-    public void shouldBeInMemoryHistoryManagerTheFirstElementIsRemovedWhenTheSizeIsFull() {
-        Task taskTestFirst = new Task("Тест", Status.NEW, "Описание");
-        taskTestFirst.setId(1);
-        historyManager.addTaskToHistory(taskTestFirst);
-        for (int i = 0; i < 10; i++) {
-            Task task = new Task("Имя", Status.NEW, "Описание");
-            historyManager.addTaskToHistory(task);
-        }
+    public void shouldBeInMemoryHistoryManagerCanRemoveFirst() {
+        Task task1 = new Task("Имя", Status.NEW, "Описание");
+        Task task2 = new Task("Имя2", Status.NEW, "Описание2");
+        Task task3 = new Task("Имя3", Status.NEW, "Описание3");
+        task1.setId(1);
+        task2.setId(2);
+        task3.setId(3);
+        historyManager.addTaskToHistory(task1);
+        historyManager.addTaskToHistory(task2);
+        historyManager.addTaskToHistory(task3);
+        historyManager.remove(task1.getId());
+        assertEquals(historyManager.getHistory(), List.of(task2, task3), "First element,not remove");
+
+    }
+
+    @Test
+    public void shouldBeInMemoryHistoryManagerCanRemoveMidle() {
+        Task task1 = new Task("Имя", Status.NEW, "Описание");
+        Task task2 = new Task("Имя2", Status.NEW, "Описание2");
+        Task task3 = new Task("Имя3", Status.NEW, "Описание3");
+        task1.setId(1);
+        task2.setId(2);
+        task3.setId(3);
+        historyManager.addTaskToHistory(task1);
+        historyManager.addTaskToHistory(task2);
+        historyManager.addTaskToHistory(task3);
+        historyManager.remove(task2.getId());
+        assertEquals(historyManager.getHistory(), List.of(task1, task3), "Midle element,not remove");
+    }
+
+    @Test
+    public void shouldBeInMemoryHistoryManagerCanRemoveLast() {
+        Task task1 = new Task("Имя", Status.NEW, "Описание");
+        Task task2 = new Task("Имя2", Status.NEW, "Описание2");
+        Task task3 = new Task("Имя3", Status.NEW, "Описание3");
+        task1.setId(1);
+        task2.setId(2);
+        task3.setId(3);
+        historyManager.addTaskToHistory(task1);
+        historyManager.addTaskToHistory(task2);
+        historyManager.addTaskToHistory(task3);
+        historyManager.remove(task3.getId());
+        assertEquals(historyManager.getHistory(), List.of(task1, task2), "Last element,not remove");
+    }
+
+
+    @Test
+    public void shouldBeInMemoryHistoryManagerCanHaveDuplicate() {
+        Task task1 = new Task("Имя", Status.NEW, "Описание");
+        Task task2 = new Task("Имя2", Status.NEW, "Описание2");
+        task1.setId(1);
+        task2.setId(1);
+        historyManager.addTaskToHistory(task1);
+        historyManager.addTaskToHistory(task2);
         List<Task> history = historyManager.getHistory();
-        boolean isExpected = history.getFirst().equals(taskTestFirst);
-        assertFalse(isExpected);
+        assertEquals(1, history.size(), "Duplicate in history");
+        assertEquals(task1, history.getFirst(), "Tasks not equals");
+    }
+
+    @Test
+    public void shouldBeInMemoryHistoryManagertheSubtaskDoesNotStoreTheOldId() {
+        Epic epic1 = new Epic("Имя", "Описание");
+        Epic epic2 = new Epic("Имя2", "Описание2");
+        epic1.setId(3);
+        epic2.setId(4);
+        historyManager.addTaskToHistory(epic1);
+        historyManager.addTaskToHistory(epic2);
+        SubTask subTask1 = new SubTask("Name", Status.NEW, "abv", epic1.getId());
+        SubTask subTask2 = new SubTask("Name2", Status.NEW, "abv2", epic1.getId());
+        subTask1.setId(1);
+        subTask2.setId(2);
+        historyManager.addTaskToHistory(subTask1);
+        historyManager.addTaskToHistory(subTask2);
+        historyManager.remove(1);
+        List<Task> history = historyManager.getHistory();
+        assertNotEquals(subTask1.getId(), history.get(subTask1.getId()), "Duplicate in history");
     }
 }
