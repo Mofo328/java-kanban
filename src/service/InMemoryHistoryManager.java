@@ -39,7 +39,7 @@ public class InMemoryHistoryManager implements HistoryManager {
     }
 
     private List<Task> getTasks() {
-        List <Task> tasksHistory = new ArrayList<>();
+        List<Task> tasksHistory = new ArrayList<>();
         Node current = first;
         while (current != null) {
             tasksHistory.add(current.task);
@@ -71,14 +71,14 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     @Override
     public void remove(int id) {
-    removeNode(id);
+        removeNode(id);
     }
 
     @Override
     public void addTaskToHistory(Task task) {
-      removeNode(task.getId());
-      linkLast(task);
-      nodes.put(task.getId(), last);
+        removeNode(task.getId());
+        linkLast(task);
+        nodes.put(task.getId(), last);
     }
 
 
