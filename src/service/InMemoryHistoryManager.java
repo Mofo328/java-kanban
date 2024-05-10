@@ -23,9 +23,9 @@ public class InMemoryHistoryManager implements HistoryManager {
         }
     }
 
-    Node first;
-    Node last;
-    Map<Integer, Node> nodes = new HashMap<>();
+    private Node first;
+    private Node last;
+    private Map<Integer, Node> nodes = new HashMap<>();
 
 
     private void linkLast(Task task) {
@@ -76,6 +76,9 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     @Override
     public void addTaskToHistory(Task task) {
+        if (task.getId() == 0) {
+            return;
+        }
         removeNode(task.getId());
         linkLast(task);
         nodes.put(task.getId(), last);
