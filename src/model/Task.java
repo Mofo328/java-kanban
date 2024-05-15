@@ -18,7 +18,7 @@ public class Task {
         return id;
     }
 
-    public  void setId(int id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -51,7 +51,7 @@ public class Task {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Task task = (Task) o;
-        return id == task.id ;
+        return id == task.id;
     }
 
     @Override

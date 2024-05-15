@@ -9,9 +9,11 @@ public class Epic extends Task {
     public Epic(String name, String description) {
         super(name, Status.NEW, description);
     }
+
     public void removeSubTasks(Integer id) {
         subTasks.remove(id);
     }
+
     public List<Integer> getIdSubTasks() {
         return subTasks;
     }
