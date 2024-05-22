@@ -83,7 +83,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void shoudInMemoryManagerEpicAndSubTasksRemoveById() throws ManagerSaveException {
+    public void shouldInMemoryManagerEpicAndSubTasksRemoveById() throws ManagerSaveException {
         Epic epic = new Epic("Имя", "Описание");
         Epic epic2 = new Epic("Имя2", "Описание2");
         taskManager.createEpic(epic);
@@ -99,7 +99,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void shoudInMemoryManagerAllTypesOfTasksCanClear() throws ManagerSaveException {
+    public void shouldInMemoryManagerAllTypesOfTasksCanClear() throws ManagerSaveException {
         Task task = new Task("Имя", Status.NEW, "Описание");
         taskManager.create(task);
         taskManager.update(task);
@@ -121,7 +121,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void shoudInMemoryManagerCanGetAllSubTaskByEpicId() throws ManagerSaveException {
+    public void shouldInMemoryManagerCanGetAllSubTaskByEpicId() throws ManagerSaveException {
         Epic epic = new Epic("Имя", "Описание");
         taskManager.createEpic(epic);
         taskManager.updateEpic(epic);

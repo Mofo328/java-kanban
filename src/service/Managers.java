@@ -3,7 +3,7 @@ package service;
 import java.io.File;
 
 public class Managers {
-    static File file = new File("file.csv");
+    static File file = new File("C:\\Users\\Win\\IdeaProjects\\java-kanban\\resources\\tasks.csv");
 
     public static TaskManager getDefault() {
         return new InMemoryTaskManager();

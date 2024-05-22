@@ -5,6 +5,7 @@ import model.*;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,10 +13,11 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     private final File file;
 
-    private Converter converter;
+    private final Converter converter;
 
     public FileBackedTaskManager(File file) {
         this.file = file;
+        this.converter = new Converter();
     }
 
     @Override
@@ -99,37 +101,34 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         allTasks.addAll(getAllEpics());
         allTasks.addAll(getAllSubTask());
         try (FileWriter fileWriter = new FileWriter(file, StandardCharsets.UTF_8)) {
-            fileWriter.write("id,name,status,type,description" + "\n");
             for (Task task : allTasks) {
                 fileWriter.write(converter.toString(task) + "\n");
             }
-
-
         } catch (IOException e) {
             throw new ManagerSaveException("Сохранение файла прошло не удачно");
         }
-
     }
 
-    public static FileBackedTaskManager loadFromFile(File file) {
+    public static void loadFromFile(File file) {
         FileBackedTaskManager fileBackedTaskManager = Managers.getDefaultFileBackedTaskManager();
-        try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(file, StandardCharsets.UTF_8));
-            Task task = null;
-            while (bufferedReader.ready()) {
-                String fileText = bufferedReader.readLine();
+
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
+            Task task;
+            String fileText;
+            while ((fileText = bufferedReader.readLine()) != null) {
                 if (!fileText.isEmpty()) {
                     task = Converter.fromString(fileText);
-                }
-                switch (task.getType()) {
-                    case TASK -> fileBackedTaskManager.tasks.put(task.getId(), task);
-                    case EPIC -> fileBackedTaskManager.epics.put(task.getId(), (Epic) task);
-                    case SUBTASK -> fileBackedTaskManager.subTasks.put(task.getId(), (SubTask) task);
+                    if (task != null) {
+                        switch (task.getType()) {
+                            case TASK -> fileBackedTaskManager.tasks.put(task.getId(), task);
+                            case EPIC -> fileBackedTaskManager.epics.put(task.getId(), (Epic) task);
+                            case SUBTASK -> fileBackedTaskManager.subTasks.put(task.getId(), (SubTask) task);
+                        }
+                    }
                 }
             }
         } catch (IOException e) {
-            throw new ManagerSaveException("Произошла ошибка при записи файла");
+            throw new ManagerSaveException("Произошла ошибка при чтении файла");
         }
-        return fileBackedTaskManager;
     }
 }
