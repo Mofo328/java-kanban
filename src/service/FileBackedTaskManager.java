@@ -161,7 +161,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
         return null;
     }
 
-    public static void loadFromFile(File file) throws ManagerSaveException {
+    public static FileBackedTaskManager loadFromFile(File file) throws ManagerSaveException {
         FileBackedTaskManager fileBackedTaskManager = Managers.getDefaultFileBackedTaskManager();
         try {
             BufferedReader bufferedReader = new BufferedReader(new FileReader(file, StandardCharsets.UTF_8));
@@ -182,5 +182,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
         } catch (IOException e) {
             throw new ManagerSaveException("Произошла ошибка при записи файла");
         }
+        return fileBackedTaskManager;
     }
 }
