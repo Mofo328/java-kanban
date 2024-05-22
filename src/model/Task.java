@@ -7,18 +7,16 @@ public class Task {
     protected String name;
     protected Status status;
     protected String description;
-    protected TypeOfTask type;
 
 
     public Task(String name, Status status, String description) {
         this.name = name;
         this.status = status;
         this.description = description;
-        this.type = TypeOfTask.TASK;
     }
 
     public TypeOfTask getType() {
-        return type;
+        return TypeOfTask.TASK;
     }
 
     public int getId() {
@@ -73,7 +71,6 @@ public class Task {
                 ", name='" + name + '\'' +
                 ", status=" + status +
                 ", description='" + description + '\'' +
-                ", type=" + type +
                 '}';
     }
 }
