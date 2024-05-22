@@ -171,7 +171,13 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
                 if (!fileText.isEmpty()) {
                     task = fromString(fileText);
                 }
-              fileBackedTaskManager.create(task);
+                if (task.getType() == TypeOfTask.TASK) {
+                    fileBackedTaskManager.create(task);
+                } else if (task.getType() == TypeOfTask.EPIC) {
+                    fileBackedTaskManager.createEpic((Epic) task);
+                } else if (task.getType() == TypeOfTask.SUBTASK) {
+                    fileBackedTaskManager.createSubTask((SubTask) task);
+                }
             }
         } catch (IOException e) {
             throw new ManagerSaveException("Произошла ошибка при записи файла");
