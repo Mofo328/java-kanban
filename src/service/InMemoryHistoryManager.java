@@ -20,7 +20,6 @@ public class InMemoryHistoryManager implements HistoryManager {
         tasksHistory.add(task);
     }
 
-
     @Override
     public List<Task> getHistory() {
         return List.copyOf(tasksHistory);

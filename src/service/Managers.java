@@ -9,6 +9,10 @@ public class Managers {
         return new InMemoryTaskManager();
     }
 
+    public static File getFile() {
+        return file;
+    }
+
     public static HistoryManager getDefaultHistory() {
         return new InMemoryHistoryManager();
     }
