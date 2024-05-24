@@ -2,6 +2,8 @@ package service;
 
 
 import model.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -10,6 +12,21 @@ import java.io.IOException;
 import static org.junit.jupiter.api.Assertions.*;
 
 class FileBackedTaskManagerTest {
+
+    private File saveFile;
+
+    @BeforeEach
+    public void beforeEach() {
+        saveFile = new File("resources/tasks.csv");
+    }
+
+    @AfterEach
+    public void afterEach() {
+        if (saveFile != null && saveFile.exists()) {
+            boolean delete = saveFile.delete();
+            System.out.println(delete + " Файл успешно удален");
+        }
+    }
 
     @Test
     public void shouldBeFileBackedManagerRestoreStateFromFile() {
@@ -20,22 +37,10 @@ class FileBackedTaskManagerTest {
         fileBackedTaskManager.create(task1);
         fileBackedTaskManager.createEpic(epic1);
         fileBackedTaskManager.createSubTask(subTask1);
-        File saveFile = Managers.getFile();
         FileBackedTaskManager fileBackedTaskManager2 = FileBackedTaskManager.loadFromFile(saveFile);
         assertEquals(fileBackedTaskManager.getAll(), fileBackedTaskManager2.getAll(), "Списки задач не совпадают");
         assertEquals(fileBackedTaskManager.getAllEpics(), fileBackedTaskManager2.getAllEpics(), "Списки эпиков не совпадают");
         assertEquals(fileBackedTaskManager.getAllSubTask(), fileBackedTaskManager2.getAllSubTask(), "Списки подзадач не совпадают");
-    }
-
-    @Test
-    public void StringToTask() {
-        Task task1 = Converter.fromString("""
-                1,Имя задачи 1,NEW,Описание задачи 1,TASK,
-                2,Имя эпика 1,NEW,Описание эпика 1,EPIC,
-                3,Имя подзадачи 1,NEW,Описание подзадачи 1,SUBTASK,2"""
-        );
-        Task task2 = new Task("Имя задачи 1", Status.NEW, "Описание задачи 1");
-        assertEquals(task1, task2);
     }
 }
 

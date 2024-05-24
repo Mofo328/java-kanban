@@ -6,11 +6,6 @@ import java.util.List;
 public class Epic extends Task {
     protected final List<Integer> subTasksFromEpic = new ArrayList<>();
 
-    @Override
-    public Integer getEpicId() {
-        return super.getEpicId();
-    }
-
     public Epic(int id, String name, String description) {
         super(id, name, Status.NEW, description);
     }
@@ -20,6 +15,10 @@ public class Epic extends Task {
         this.id = getId();
     }
 
+    @Override
+    public Integer getEpicId() {
+        return super.getEpicId();
+    }
     @Override
     public TypeOfTask getType() {
         return TypeOfTask.EPIC;
