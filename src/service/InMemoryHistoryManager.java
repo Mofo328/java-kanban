@@ -2,9 +2,9 @@ package service;
 
 import model.Task;
 
-
 import java.util.ArrayList;
 import java.util.HashMap;
+
 import java.util.List;
 import java.util.Map;
 
@@ -84,6 +84,7 @@ public class InMemoryHistoryManager implements HistoryManager {
         nodes.put(task.getId(), last);
 
     }
+
 
     @Override
     public List<Task> getHistory() {

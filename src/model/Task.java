@@ -8,10 +8,22 @@ public class Task {
     protected Status status;
     protected String description;
 
+
+    public Task(int id, String name, Status status, String description) {
+        this.id = id;
+        this.name = name;
+        this.status = status;
+        this.description = description;
+    }
+
     public Task(String name, Status status, String description) {
         this.name = name;
         this.status = status;
         this.description = description;
+    }
+
+    public TypeOfTask getType() {
+        return TypeOfTask.TASK;
     }
 
     public int getId() {
@@ -32,6 +44,10 @@ public class Task {
 
     public Status getStatus() {
         return status;
+    }
+
+    public Integer getEpicId() {
+        return null;
     }
 
     public void setStatus(Status status) {

@@ -11,6 +11,6 @@ class ManagersTest {
     public void shouldManagerCanReturnManagersReadyToWork() {
         assertNotNull(Managers.getDefault());
         assertNotNull(Managers.getDefaultHistory());
+        assertNotNull(Managers.getDefaultFileBackedTaskManager());
     }
-
 }

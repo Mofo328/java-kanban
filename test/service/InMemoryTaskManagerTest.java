@@ -1,9 +1,7 @@
 package service;
 
-import model.Epic;
-import model.SubTask;
-import model.Task;
-import model.Status;
+import exceptions.ManagerSaveException;
+import model.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -19,7 +17,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void shouldInMemoryTaskManagerCreateAllTypeOfTasks() {
+    public void shouldInMemoryTaskManagerCreateAllTypeOfTasks() throws ManagerSaveException {
         Task task = new Task("Имя", Status.NEW, "Описание");
         taskManager.create(task);
         assertNotNull(taskManager.get(1), "Задача не найдена");
@@ -32,7 +30,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void shouldInMemoryTaskManagerCanGetAllTypeOfTasks() {
+    public void shouldInMemoryTaskManagerCanGetAllTypeOfTasks() throws ManagerSaveException {
         Task task = new Task("Имя", Status.NEW, "Описание");
         taskManager.create(task);
         assertEquals(1, taskManager.getAll().size());
@@ -45,7 +43,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void shouldInMemoryTaskManagerReallyEqualsTypes() {
+    public void shouldInMemoryTaskManagerReallyEqualsTypes() throws ManagerSaveException {
         Task task = new Task("Имя", Status.NEW, "Описание");
         taskManager.create(task);
         assertEquals(task, taskManager.get(1));
@@ -58,7 +56,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void shouldInMemoryManagerAllTypesOfTasksCanUpdate() {
+    public void shouldInMemoryManagerAllTypesOfTasksCanUpdate() throws ManagerSaveException {
         Task task = new Task("Имя", Status.NEW, "Описание");
         taskManager.create(task);
         taskManager.update(task);
@@ -74,7 +72,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void shouldInMemoryManagerTaskRemoveById() {
+    public void shouldInMemoryManagerTaskRemoveById() throws ManagerSaveException {
         Task task = new Task("Имя", Status.NEW, "Описание");
         Task task2 = new Task("Имя2", Status.NEW, "Описание2");
         taskManager.create(task);
@@ -85,7 +83,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void shoudInMemoryManagerEpicAndSubTasksRemoveById() {
+    public void shouldInMemoryManagerEpicAndSubTasksRemoveById() throws ManagerSaveException {
         Epic epic = new Epic("Имя", "Описание");
         Epic epic2 = new Epic("Имя2", "Описание2");
         taskManager.createEpic(epic);
@@ -101,7 +99,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void shoudInMemoryManagerAllTypesOfTasksCanClear() {
+    public void shouldInMemoryManagerAllTypesOfTasksCanClear() throws ManagerSaveException {
         Task task = new Task("Имя", Status.NEW, "Описание");
         taskManager.create(task);
         taskManager.update(task);
@@ -123,7 +121,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void shoudInMemoryManagerCanGetAllSubTaskByEpicId() {
+    public void shouldInMemoryManagerCanGetAllSubTaskByEpicId() throws ManagerSaveException {
         Epic epic = new Epic("Имя", "Описание");
         taskManager.createEpic(epic);
         taskManager.updateEpic(epic);
