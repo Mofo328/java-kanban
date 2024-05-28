@@ -5,7 +5,6 @@ import model.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import java.io.File;
 import java.io.IOException;
 
@@ -16,8 +15,8 @@ class FileBackedTaskManagerTest {
     private File saveFile;
 
     @BeforeEach
-    public void beforeEach() {
-        saveFile = new File("resources/tasks.csv");
+    public void beforeEach() throws IOException {
+        saveFile = File.createTempFile("tasks",".csv", new File("C:\\Users\\Win\\IdeaProjects\\java-kanban\\resources"));
     }
 
     @AfterEach
@@ -30,7 +29,7 @@ class FileBackedTaskManagerTest {
 
     @Test
     public void shouldBeFileBackedManagerRestoreStateFromFile() {
-        FileBackedTaskManager fileBackedTaskManager = Managers.getDefaultFileBackedTaskManager();
+        FileBackedTaskManager fileBackedTaskManager = new FileBackedTaskManager(saveFile);
         Task task1 = new Task("Имя задачи 1", Status.NEW, "Описание задачи 1");
         Epic epic1 = new Epic("Имя эпика 1", "Описание эпика 1");
         SubTask subTask1 = new SubTask("Имя подзадачи 1", Status.NEW, "Описание подзадачи 1", 2);

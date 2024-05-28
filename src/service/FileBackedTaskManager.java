@@ -118,25 +118,24 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                         if (task.getId() > maxId) {
                             maxId = task.getId();
                         }
-                        for (int i = 0; i < maxId; i++) {
-                            switch (task.getType()) {
-                                case TASK -> fileBackedTaskManager.tasks.put(task.getId(), task);
-                                case EPIC -> fileBackedTaskManager.epics.put(task.getId(), (Epic) task);
-                                case SUBTASK -> {
-                                    fileBackedTaskManager.subTasks.put(task.getId(), (SubTask) task);
-                                    if (fileBackedTaskManager.epics.containsKey(task.getEpicId())) {
-                                        Epic epic = fileBackedTaskManager.epics.get(task.getEpicId());
-                                        epic.addSubTasks(task.getId());
-                                    }
-                                }
+
+                        switch (task.getType()) {
+                            case TASK -> fileBackedTaskManager.tasks.put(task.getId(), task);
+                            case EPIC -> fileBackedTaskManager.epics.put(task.getId(), (Epic) task);
+                            case SUBTASK -> {
+                                fileBackedTaskManager.subTasks.put(task.getId(), (SubTask) task);
+                                    Epic epic = fileBackedTaskManager.epics.get(task.getEpicId());
+                                    epic.addSubTasks(task.getId());
                             }
                         }
                     }
                 }
             }
+            fileBackedTaskManager.idCounter = maxId + 1;
         } catch (IOException e) {
             throw new ManagerSaveException("Произошла ошибка при чтении файла");
         }
+
         return fileBackedTaskManager;
     }
 }
