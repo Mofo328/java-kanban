@@ -6,10 +6,13 @@ import model.SubTask;
 import model.Task;
 
 import java.util.List;
+import java.util.TreeSet;
 
 public interface TaskManager {
 
     List<Task> getHistory();
+
+    TreeSet<Task> getPrioritizedTasks();
 
     Task create(Task task) throws ManagerSaveException;
 

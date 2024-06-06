@@ -8,6 +8,8 @@ import model.Status;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 
@@ -24,7 +26,7 @@ class InMemoryHistoryManagerTest {
 
     @Test
     public void shouldBeInMemoryHistoryManagerAddTaskToHistory() {
-        Task task = new Task("Имя", Status.NEW, "Описание");
+        Task task = new Task("Имя", Status.NEW, "Описание", Duration.ofMinutes(3), LocalDateTime.of(2024, 2, 3, 2, 0));
         historyManager.addTaskToHistory(task);
         List<Task> tasksHistory = historyManager.getHistory();
         assertEquals(1, tasksHistory.size(), "History not add");
@@ -38,9 +40,9 @@ class InMemoryHistoryManagerTest {
 
     @Test
     public void shouldBeInMemoryHistoryManagerCanRemoveFirst() {
-        Task task1 = new Task("Имя", Status.NEW, "Описание");
-        Task task2 = new Task("Имя2", Status.NEW, "Описание2");
-        Task task3 = new Task("Имя3", Status.NEW, "Описание3");
+        Task task1 = new Task("Имя", Status.NEW, "Описание", Duration.ofMinutes(3), LocalDateTime.of(2024, 2, 3, 2, 0));
+        Task task2 = new Task("Имя2", Status.NEW, "Описание2", Duration.ofMinutes(3), LocalDateTime.of(2024, 2, 3, 2, 0));
+        Task task3 = new Task("Имя3", Status.NEW, "Описание3", Duration.ofMinutes(3), LocalDateTime.of(2024, 2, 3, 2, 0));
         task1.setId(1);
         task2.setId(2);
         task3.setId(3);
@@ -54,9 +56,9 @@ class InMemoryHistoryManagerTest {
 
     @Test
     public void shouldBeInMemoryHistoryManagerCanRemoveMidle() {
-        Task task1 = new Task("Имя", Status.NEW, "Описание");
-        Task task2 = new Task("Имя2", Status.NEW, "Описание2");
-        Task task3 = new Task("Имя3", Status.NEW, "Описание3");
+        Task task1 = new Task("Имя", Status.NEW, "Описание", Duration.ofMinutes(3), LocalDateTime.of(2024, 2, 3, 2, 0));
+        Task task2 = new Task("Имя2", Status.NEW, "Описание2", Duration.ofMinutes(3), LocalDateTime.of(2024, 2, 3, 2, 0));
+        Task task3 = new Task("Имя3", Status.NEW, "Описание3", Duration.ofMinutes(3), LocalDateTime.of(2024, 2, 3, 2, 0));
         task1.setId(1);
         task2.setId(2);
         task3.setId(3);
@@ -69,9 +71,9 @@ class InMemoryHistoryManagerTest {
 
     @Test
     public void shouldBeInMemoryHistoryManagerCanRemoveLast() {
-        Task task1 = new Task("Имя", Status.NEW, "Описание");
-        Task task2 = new Task("Имя2", Status.NEW, "Описание2");
-        Task task3 = new Task("Имя3", Status.NEW, "Описание3");
+        Task task1 = new Task("Имя", Status.NEW, "Описание", Duration.ofMinutes(3), LocalDateTime.of(2024, 2, 3, 2, 0));
+        Task task2 = new Task("Имя2", Status.NEW, "Описание2", Duration.ofMinutes(3), LocalDateTime.of(2024, 2, 3, 2, 0));
+        Task task3 = new Task("Имя3", Status.NEW, "Описание3", Duration.ofMinutes(3), LocalDateTime.of(2024, 2, 3, 2, 0));
         task1.setId(1);
         task2.setId(2);
         task3.setId(3);
@@ -85,8 +87,8 @@ class InMemoryHistoryManagerTest {
 
     @Test
     public void shouldBeInMemoryHistoryManagerCanHaveDuplicate() {
-        Task task1 = new Task("Имя", Status.NEW, "Описание");
-        Task task2 = new Task("Имя2", Status.NEW, "Описание2");
+        Task task1 = new Task("Имя", Status.NEW, "Описание", Duration.ofMinutes(3), LocalDateTime.of(2024, 2, 3, 2, 0));
+        Task task2 = new Task("Имя2", Status.NEW, "Описание2", Duration.ofMinutes(3), LocalDateTime.of(2024, 2, 3, 2, 0));
         task1.setId(1);
         task2.setId(1);
         historyManager.addTaskToHistory(task1);
@@ -98,14 +100,14 @@ class InMemoryHistoryManagerTest {
 
     @Test
     public void shouldBeInMemoryHistoryManagertheSubtaskDoesNotStoreTheOldId() {
-        Epic epic1 = new Epic("Имя", "Описание");
-        Epic epic2 = new Epic("Имя2", "Описание2");
+        Epic epic1 = new Epic("Имя", "Описание", Duration.ofMinutes(3), LocalDateTime.of(2024, 2, 3, 2, 0));
+        Epic epic2 = new Epic("Имя2", "Описание2", Duration.ofMinutes(3), LocalDateTime.of(2024, 2, 3, 2, 0));
         epic1.setId(3);
         epic2.setId(4);
         historyManager.addTaskToHistory(epic1);
         historyManager.addTaskToHistory(epic2);
-        SubTask subTask1 = new SubTask("Name", Status.NEW, "abv", epic1.getId());
-        SubTask subTask2 = new SubTask("Name2", Status.NEW, "abv2", epic1.getId());
+        SubTask subTask1 = new SubTask("Name", Status.NEW, "abv", Duration.ofMinutes(5), LocalDateTime.of(2024, 1, 1, 2, 0), epic1.getId());
+        SubTask subTask2 = new SubTask("Name2", Status.NEW, "abv2", Duration.ofMinutes(5), LocalDateTime.of(2024, 1, 1, 2, 0), epic1.getId());
         subTask1.setId(1);
         subTask2.setId(2);
         historyManager.addTaskToHistory(subTask1);

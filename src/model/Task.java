@@ -1,5 +1,7 @@
 package model;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Task {
@@ -7,19 +9,24 @@ public class Task {
     protected String name;
     protected Status status;
     protected String description;
+    protected Duration duration;
+    protected LocalDateTime startTime;
 
-
-    public Task(int id, String name, Status status, String description) {
+    public Task(int id, String name, Status status, String description, Duration duration, LocalDateTime startTime) {
         this.id = id;
         this.name = name;
         this.status = status;
         this.description = description;
+        this.duration = duration;
+        this.startTime = startTime;
     }
 
-    public Task(String name, Status status, String description) {
+    public Task(String name, Status status, String description, Duration duration, LocalDateTime startTime) {
         this.name = name;
         this.status = status;
         this.description = description;
+        this.duration = duration;
+        this.startTime = startTime;
     }
 
     public TypeOfTask getType() {
@@ -62,6 +69,26 @@ public class Task {
         this.description = description;
     }
 
+    public LocalDateTime getEndTime() {
+        return startTime.plusMinutes(duration.toMinutes());
+    }
+
+    public Duration getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Duration duration) {
+        this.duration = duration;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -72,7 +99,7 @@ public class Task {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, status, description);
+        return Objects.hash(id, name, status, description, duration, startTime);
     }
 
     @Override
@@ -82,6 +109,17 @@ public class Task {
                 ", name='" + name + '\'' +
                 ", status=" + status +
                 ", description='" + description + '\'' +
+                ", duration=" + duration +
+                ", startTime=" + startTime +
                 '}';
     }
 }
+
+
+
+
+
+
+
+
+
