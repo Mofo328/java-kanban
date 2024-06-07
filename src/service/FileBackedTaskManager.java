@@ -97,6 +97,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         allTasks.addAll(getAllEpics());
         allTasks.addAll(getAllSubTask());
         try (FileWriter fileWriter = new FileWriter(file, StandardCharsets.UTF_8)) {
+            fileWriter.write(("id,name,status,description,type,duration,startTime,endTime,epic" + "\n"));
             for (Task task : allTasks) {
                 fileWriter.write(Converter.toString(task) + "\n");
             }
@@ -111,21 +112,28 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             int maxId = 0;
             Task task;
             String fileText;
+            List<String> linesInFile = new ArrayList<>();
             while ((fileText = bufferedReader.readLine()) != null) {
                 if (!fileText.isEmpty()) {
-                    task = Converter.fromString(fileText);
-                    if (task != null) {
-                        if (task.getId() > maxId) {
-                            maxId = task.getId();
-                        }
-
-                        switch (task.getType()) {
-                            case TASK -> fileBackedTaskManager.tasks.put(task.getId(), task);
-                            case EPIC -> fileBackedTaskManager.epics.put(task.getId(), (Epic) task);
-                            case SUBTASK -> {
-                                fileBackedTaskManager.subTasks.put(task.getId(), (SubTask) task);
-                                Epic epic = fileBackedTaskManager.epics.get(task.getEpicId());
-                                epic.addSubTasks(task.getId());
+                    linesInFile.add(fileText);
+                    for (int i = 1; i < linesInFile.size(); i++) {
+                        task = Converter.fromString(linesInFile.get(i));
+                        if (task != null) {
+                            if (task.getId() > maxId) {
+                                maxId = task.getId();
+                            }
+                            switch (task.getType()) {
+                                case TASK -> {
+                                    fileBackedTaskManager.tasks.put(task.getId(), task);
+                                    fileBackedTaskManager.prioritizedTasks.add(task);
+                                }
+                                case EPIC -> fileBackedTaskManager.epics.put(task.getId(), (Epic) task);
+                                case SUBTASK -> {
+                                    fileBackedTaskManager.subTasks.put(task.getId(), (SubTask) task);
+                                    Epic epic = fileBackedTaskManager.epics.get(task.getEpicId());
+                                    epic.addSubTasks(task.getId());
+                                    fileBackedTaskManager.prioritizedTasks.add(task);
+                                }
                             }
                         }
                     }

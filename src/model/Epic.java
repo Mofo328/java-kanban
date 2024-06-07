@@ -8,9 +8,6 @@ import java.util.List;
 public class Epic extends Task {
     protected final List<Integer> subTasksFromEpic = new ArrayList<>();
 
-    protected Duration duration;
-    protected LocalDateTime startTime;
-
     protected  LocalDateTime endTime;
 
     public Epic(int id, String name, String description, Duration duration, LocalDateTime startTime) {
@@ -19,9 +16,8 @@ public class Epic extends Task {
         this.startTime = startTime;
     }
 
-    public Epic(String name, String description,Duration duration,LocalDateTime localDateTime) {
-        super(name, Status.NEW, description,duration,localDateTime);
-        this.id = getId();
+    public Epic(String name, String description,Duration duration,LocalDateTime startTime) {
+        super(name, Status.NEW, description,duration,startTime);
         this.duration = Duration.ofMinutes(15);
         this.startTime = LocalDateTime.now();
     }

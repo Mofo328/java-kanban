@@ -13,13 +13,14 @@ import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class FileBackedTaskManagerTest {
+class FileBackedTaskManagerTest extends TaskManagerTest<TaskManager> {
 
     private File saveFile;
 
     @BeforeEach
     public void beforeEach() throws IOException {
         saveFile = File.createTempFile("tasks", ".csv", new File("C:\\Users\\Win\\IdeaProjects\\java-kanban\\resources"));
+        super.taskManager = Managers.getDefaultFileBackedTaskManager();
     }
 
     @AfterEach
@@ -37,7 +38,7 @@ class FileBackedTaskManagerTest {
                 Duration.ofMinutes(5), LocalDateTime.of(2024, 1, 1, 2, 0));
         Epic epic1 = new Epic("Имя эпика 1", "Описание эпика 1", Duration.ofMinutes(3), LocalDateTime.of(2024, 2, 3, 2, 0));
         SubTask subTask1 = new SubTask("Имя подзадачи 1", Status.NEW, "Описание подзадачи 1",
-                Duration.ofMinutes(5), LocalDateTime.of(2024, 1, 1, 2, 0), 2);
+                Duration.ofMinutes(5), LocalDateTime.of(2026, 1, 1, 2, 0), 2);
         fileBackedTaskManager.create(task1);
         fileBackedTaskManager.createEpic(epic1);
         fileBackedTaskManager.createSubTask(subTask1);
