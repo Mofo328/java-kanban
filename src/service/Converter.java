@@ -9,7 +9,7 @@ public class Converter {
 
     protected static String toString(Task task) {
         return task.getId() + "," + task.getName() + "," + task.getStatus() + "," +
-                task.getDescription() + "," + task.getType() + "," + task.getDuration() + "," + task.getStartTime() + "," + task.getEndTime() + "," + task.getEpicId();
+                task.getDescription() + "," + task.getType() + "," + task.getDuration().toMinutes() + "," + task.getStartTime() + "," + task.getEndTime() + "," + task.getEpicId();
     }
 
     protected static Task fromString(String value) {
@@ -19,7 +19,8 @@ public class Converter {
         Status status = Status.valueOf(tasks[2]);
         String description = tasks[3];
         TypeOfTask type = TypeOfTask.valueOf(tasks[4]);
-        Duration duration = Duration.parse(tasks[5]);
+        long durationInMinutes = Long.parseLong(tasks[5]);
+        Duration duration = Duration.ofMinutes(durationInMinutes);
         LocalDateTime startTime = LocalDateTime.parse(tasks[6]);
         return switch (type) {
             case TASK -> new Task(id, name, status, description, duration, startTime);

@@ -31,10 +31,11 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Task create(Task task) {
         task.setId(generateId());
-        checkTaskTime(task);
-        prioritizedTasks.remove(task);
-        prioritizedTasks.add(task);
         tasks.put(task.getId(), task);
+        if (task.getStartTime() != null) {
+            checkTaskTime(task);
+            prioritizedTasks.add(task);
+        }
         return task;
     }
 
@@ -112,6 +113,7 @@ public class InMemoryTaskManager implements TaskManager {
         subTasks.keySet().forEach(historyManager::remove);
         epics.clear();
         subTasks.clear();
+        prioritizedTasks.remove(subTasks.values());
     }
 
     @Override
@@ -119,7 +121,7 @@ public class InMemoryTaskManager implements TaskManager {
         epics.get(id).getIdSubTasks().forEach(idSubTask -> {
             subTasks.remove(idSubTask);
             historyManager.remove(idSubTask);
-            prioritizedTasks.remove(getSubTaskById(idSubTask));
+            prioritizedTasks.remove(subTasks.get(idSubTask));
         });
         epics.remove(id);
         historyManager.remove(id);
@@ -137,11 +139,11 @@ public class InMemoryTaskManager implements TaskManager {
             subTask.setId(generateId());
             epic.addSubTasks(subTask.getId());
             subTasks.put(subTask.getId(), subTask);
-            checkTaskTime(subTask);
-            prioritizedTasks.remove(subTask);
-            prioritizedTasks.add(subTask);
             updateEpicInfo(epic);
-
+            if (subTask.getStartTime() != null) {
+                checkTaskTime(subTask);
+                prioritizedTasks.add(subTask);
+            }
         }
         return subTask;
     }
@@ -265,7 +267,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
-    public boolean checkTasksOverlap(Task task, Task existTask) {
+    private boolean checkTasksOverlap(Task task, Task existTask) {
         return !(task.getStartTime().isAfter(existTask.getEndTime()) || task.getEndTime().isBefore(existTask.getStartTime()));
     }
 

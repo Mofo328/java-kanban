@@ -12,14 +12,10 @@ public class Epic extends Task {
 
     public Epic(int id, String name, String description, Duration duration, LocalDateTime startTime) {
         super(id, name, Status.NEW, description,duration,startTime);
-        this.duration = duration;
-        this.startTime = startTime;
     }
 
     public Epic(String name, String description,Duration duration,LocalDateTime startTime) {
         super(name, Status.NEW, description,duration,startTime);
-        this.duration = Duration.ofMinutes(15);
-        this.startTime = LocalDateTime.now();
     }
 
     @Override

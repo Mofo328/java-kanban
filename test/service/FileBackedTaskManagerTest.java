@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
+import static java.io.File.createTempFile;
 import static org.junit.jupiter.api.Assertions.*;
 
 class FileBackedTaskManagerTest extends TaskManagerTest<TaskManager> {
@@ -19,8 +20,8 @@ class FileBackedTaskManagerTest extends TaskManagerTest<TaskManager> {
 
     @BeforeEach
     public void beforeEach() throws IOException {
-        saveFile = File.createTempFile("tasks", ".csv", new File("C:\\Users\\Win\\IdeaProjects\\java-kanban\\resources"));
-        super.taskManager = Managers.getDefaultFileBackedTaskManager();
+        saveFile = createTempFile("tasks", ".csv", new File("C:\\Users\\Win\\IdeaProjects\\java-kanban\\resources"));
+       taskManager = Managers.getDefaultFileBackedTaskManager();
     }
 
     @AfterEach
@@ -35,7 +36,7 @@ class FileBackedTaskManagerTest extends TaskManagerTest<TaskManager> {
     public void shouldBeFileBackedManagerRestoreStateFromFile() {
         FileBackedTaskManager fileBackedTaskManager = new FileBackedTaskManager(saveFile);
         Task task1 = new Task("Имя задачи 1", Status.NEW, "Описание задачи 1",
-                Duration.ofMinutes(5), LocalDateTime.of(2024, 1, 1, 2, 0));
+                Duration.ofMinutes(5), LocalDateTime.of(2023, 1, 1, 2, 0));
         Epic epic1 = new Epic("Имя эпика 1", "Описание эпика 1", Duration.ofMinutes(3), LocalDateTime.of(2024, 2, 3, 2, 0));
         SubTask subTask1 = new SubTask("Имя подзадачи 1", Status.NEW, "Описание подзадачи 1",
                 Duration.ofMinutes(5), LocalDateTime.of(2026, 1, 1, 2, 0), 2);
@@ -46,6 +47,22 @@ class FileBackedTaskManagerTest extends TaskManagerTest<TaskManager> {
         assertEquals(fileBackedTaskManager.getAll(), fileBackedTaskManager2.getAll(), "Списки задач не совпадают");
         assertEquals(fileBackedTaskManager.getAllEpics(), fileBackedTaskManager2.getAllEpics(), "Списки эпиков не совпадают");
         assertEquals(fileBackedTaskManager.getAllSubTask(), fileBackedTaskManager2.getAllSubTask(), "Списки подзадач не совпадают");
+    }
+
+    @Test
+    public void shouldBeFileBackedManagerRestorePrioritizedTasks(){
+        FileBackedTaskManager fileBackedTaskManager = new FileBackedTaskManager(saveFile);
+        Task task1 = new Task("Имя задачи 1", Status.NEW, "Описание задачи 1",
+                Duration.ofMinutes(5), LocalDateTime.of(2021, 1, 1, 2, 0));
+        Task task2 = new Task("Имя задачи 1", Status.NEW, "Описание задачи 1",
+                Duration.ofMinutes(5), LocalDateTime.of(2022, 1, 1, 2, 0));
+        Task task3 = new Task("Имя задачи 1", Status.NEW, "Описание задачи 1",
+                Duration.ofMinutes(5), LocalDateTime.of(2023, 1, 1, 2, 0));
+        fileBackedTaskManager.create(task1);
+        fileBackedTaskManager.create(task2);
+        fileBackedTaskManager.create(task3);
+        FileBackedTaskManager fileBackedTaskManager2 = FileBackedTaskManager.loadFromFile(saveFile);
+        assertEquals(fileBackedTaskManager.getPrioritizedTasks(),fileBackedTaskManager2.getPrioritizedTasks());
     }
 }
 
