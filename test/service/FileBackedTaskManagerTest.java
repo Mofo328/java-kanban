@@ -64,5 +64,13 @@ class FileBackedTaskManagerTest extends TaskManagerTest<TaskManager> {
         FileBackedTaskManager fileBackedTaskManager2 = FileBackedTaskManager.loadFromFile(saveFile);
         assertEquals(fileBackedTaskManager.getPrioritizedTasks(),fileBackedTaskManager2.getPrioritizedTasks());
     }
+
+    @Test
+    public  void shouldBeFileBackedManagerCreatedFromEmptyFile() throws IOException {
+    FileBackedTaskManager fileBackedTaskManager = FileBackedTaskManager.loadFromFile(File.createTempFile("test","csv"));
+    assertTrue(fileBackedTaskManager.getAll().isEmpty());
+    assertTrue(fileBackedTaskManager.getAllEpics().isEmpty());
+    assertTrue(fileBackedTaskManager.getAllSubTask().isEmpty());
+    }
 }
 
