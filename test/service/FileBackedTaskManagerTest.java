@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
+import static java.io.File.createTempFile;
 import static org.junit.jupiter.api.Assertions.*;
 
 class FileBackedTaskManagerTest extends TaskManagerTest<TaskManager> {
@@ -18,9 +19,9 @@ class FileBackedTaskManagerTest extends TaskManagerTest<TaskManager> {
     private File saveFile;
 
     @BeforeEach
-    public void beforeEach() {
-//        saveFile = createTempFile("tasks", ".csv", new File("C:\\Users\\Win\\IdeaProjects\\java-kanban\\resources"));
-       saveFile = new File("C:\\Users\\Win\\IdeaProjects\\java-kanban\\resources\\tasks.csv");
+    public void beforeEach() throws IOException {
+        saveFile = createTempFile("tasks", ".csv", new File("C:\\Users\\Win\\IdeaProjects\\java-kanban\\test\\testFiles"));
+//       saveFile = new File("C:\\Users\\Win\\IdeaProjects\\java-kanban\\resources\\tasks.csv");
        taskManager = Managers.getDefaultFileBackedTaskManager();
     }
 
@@ -67,7 +68,7 @@ class FileBackedTaskManagerTest extends TaskManagerTest<TaskManager> {
 
     @Test
     public  void shouldBeFileBackedManagerCreatedFromEmptyFile() throws IOException {
-    FileBackedTaskManager fileBackedTaskManager = FileBackedTaskManager.loadFromFile(File.createTempFile("test","csv"));
+    FileBackedTaskManager fileBackedTaskManager = FileBackedTaskManager.loadFromFile(createTempFile("test","csv"));
     assertTrue(fileBackedTaskManager.getAll().isEmpty());
     assertTrue(fileBackedTaskManager.getAllEpics().isEmpty());
     assertTrue(fileBackedTaskManager.getAllSubTask().isEmpty());
