@@ -11,6 +11,8 @@ public interface TaskManager {
 
     List<Task> getHistory();
 
+    List<Task> getPrioritizedTasks();
+
     Task create(Task task) throws ManagerSaveException;
 
     void deleteById(int id) throws ManagerSaveException;

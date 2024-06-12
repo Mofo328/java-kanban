@@ -1,37 +1,72 @@
 package model;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Epic extends Task {
-    private final List<Integer> subTasks = new ArrayList<>();
+    protected final List<Integer> subTasksFromEpic = new ArrayList<>();
 
-    public Epic(String name, String description) {
-        super(name, Status.NEW, description);
+    protected  LocalDateTime endTime;
+
+    public Epic(int id, String name, String description, Duration duration, LocalDateTime startTime) {
+        super(id, name, Status.NEW, description,duration,startTime);
     }
+
+    public Epic(String name, String description,Duration duration,LocalDateTime startTime) {
+        super(name, Status.NEW, description,duration,startTime);
+    }
+
+    @Override
+    public Integer getEpicId() {
+        return super.getEpicId();
+    }
+
+    @Override
+    public TypeOfTask getType() {
+        return TypeOfTask.EPIC;
+    }
+
     public void removeSubTasks(Integer id) {
-        subTasks.remove(id);
+        subTasksFromEpic.remove(id);
     }
+
     public List<Integer> getIdSubTasks() {
-        return subTasks;
+        return subTasksFromEpic;
     }
 
     public void addSubTasks(int id) {
-        subTasks.add(id);
+        subTasksFromEpic.add(id);
     }
 
     public void clearSubTasks() {
-        subTasks.clear();
+        subTasksFromEpic.clear();
+    }
+
+    @Override
+    public void setDuration(Duration duration) {
+        super.setDuration(duration);
+    }
+
+    @Override
+    public LocalDateTime getEndTime() {
+       return this.endTime;
+    }
+
+    public void setEndTime(LocalDateTime endTime) {
+        this.endTime = endTime;
     }
 
     @Override
     public String toString() {
         return "Epic{" +
-                "subTasks=" + subTasks +
-                ", id=" + id +
+                "id=" + id +
                 ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
                 ", status=" + status +
+                ", description='" + description + '\'' +
+                ", duration=" + duration +
+                ", startTime=" + startTime +
                 '}';
     }
 }
