@@ -267,7 +267,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
-    private boolean checkTasksOverlap(Task task, Task existTask) {
+    private boolean checkTasksOverlapTime(Task task, Task existTask) {
         return !(task.getStartTime().isAfter(existTask.getEndTime()) || task.getEndTime().isBefore(existTask.getStartTime()));
     }
 
@@ -275,12 +275,18 @@ public class InMemoryTaskManager implements TaskManager {
         List<Task> prioritizedTasks = getPrioritizedTasks();
         prioritizedTasks.stream()
                 .filter(existTask -> existTask.getId() != task.getId())
-                .filter(existTask -> checkTasksOverlap(task, existTask))
+                .filter(existTask -> checkTasksOverlapTime(task, existTask))
                 .findFirst()
                 .ifPresent(existTask -> {
                     throw new ValidationException("Задача " + task.getName() +
                             " пересекается с задачей " + existTask.getName());
                 });
+        if (prioritizedTasks.stream()
+                .filter(existTask -> existTask.getId() != task.getId())
+                .anyMatch(existTask -> checkTasksOverlapTime(task, existTask))) {
+            throw new ValidationException("Задача " + task.getName() +
+                    " пересекается с другой задачей.");
+        }
     }
 
     public int generateId() {
