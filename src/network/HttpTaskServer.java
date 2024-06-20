@@ -1,38 +1,41 @@
 package network;
 
 import com.sun.net.httpserver.HttpServer;
+import handlers.*;
+import service.TaskManager;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
 
 
 public class HttpTaskServer {
-    public final int PORT = 8088;
+    private final int PORT = 8080;
+    private final TaskManager taskManager;
 
-     final HttpServer server;
+    private HttpServer server;
 
-    public HttpTaskServer(){
+    public HttpTaskServer(TaskManager taskManager) {
+        this.taskManager = taskManager;
+    }
+
+
+    public void start() {
         try {
-            this.server = HttpServer.create(new InetSocketAddress(PORT),0);
-            this.server.createContext("/tasks", new TaskHandler());
-            this.server.createContext("/epics", new EpicHandler());
-            this.server.createContext("/subtasks", new SubTaskHandler());
-            this.server.createContext("/history", new HistoryHandler());
-            this.server.createContext("/prioritized", new PrioritizedHandler());
-        }catch (IOException e) {
+            server = HttpServer.create(new InetSocketAddress("localhost", PORT), 0);
+            server.start();
+            System.out.println("Сервер запущен " + PORT);
+            server.createContext("/tasks", new TaskHandler(taskManager));
+            server.createContext("/epics", new EpicHandler(taskManager));
+            server.createContext("/subtasks", new SubTaskHandler(taskManager));
+            server.createContext("/history", new HistoryHandler(taskManager));
+            server.createContext("/prioritized", new PrioritizedHandler(taskManager));
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void start() {
-        System.out.println("Запускаем сервер на порту " + PORT);
-        System.out.println("http://localhost:");
-        server.start();
-    }
-
     public void stop() {
         server.stop(0);
-        System.out.println("Остановили сервер на порту " + PORT);
+        System.out.println("Сервер остановлен " + PORT);
     }
-
 }
