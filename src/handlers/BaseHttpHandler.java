@@ -27,22 +27,13 @@ public abstract class BaseHttpHandler implements HttpHandler {
         this.taskManager = taskManager;
     }
 
-
-    protected int processRequest(HttpExchange exchange) {
-        String[] pathParts = exchange.getRequestURI().getPath().split("/");
-        if (pathParts.length == 2) {
-            return 0;
-        } else if (pathParts.length == 3) {
-            return 1;
-        } else
-            return -1;
-    }
-
-    protected void sendText(HttpExchange exchange, String responseString, int rCode) throws IOException {
+    protected void sendText(HttpExchange exchange, String responseString, int rCode) {
         try (OutputStream os = exchange.getResponseBody()) {
             var responseBytes = responseString.getBytes(DEFAULT_CHARSET);
             exchange.sendResponseHeaders(rCode, responseBytes.length);
             os.write(responseBytes);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
         exchange.close();
     }
@@ -50,7 +41,7 @@ public abstract class BaseHttpHandler implements HttpHandler {
     protected Optional<Integer> getId(HttpExchange exchange) {
 
         String[] parts = exchange.getRequestURI().getPath().split("/");
-        if (parts.length >= 2) {
+        if (parts.length >= 3) {
             String postIdStr = parts[2];
             try {
                 int postId = Integer.parseInt(postIdStr);
@@ -62,7 +53,7 @@ public abstract class BaseHttpHandler implements HttpHandler {
         return Optional.empty();
     }
 
-    protected int getIdFromPath(HttpExchange exchange) throws IOException {
+    protected int getIdFromPath(HttpExchange exchange) {
         Optional<Integer> idFromPath = getId(exchange);
         return idFromPath.orElse(-1);
     }
