@@ -73,5 +73,4 @@ public abstract class BaseHttpHandler implements HttpHandler {
                 registerTypeAdapter(Duration.class, new DurationAdapter()).setPrettyPrinting();
         return gsonBuilder.create();
     }
-
 }
