@@ -69,8 +69,9 @@ public abstract class BaseHttpHandler implements HttpHandler {
 
     public static Gson getGson() {
         GsonBuilder gsonBuilder = new GsonBuilder();
-        gsonBuilder.registerTypeAdapter(LocalDateTime.class, new LocalDateAdapter()).
-                registerTypeAdapter(Duration.class, new DurationAdapter()).setPrettyPrinting();
+        gsonBuilder.registerTypeAdapter(LocalDateTime.class, new LocalDateAdapter())
+                .registerTypeAdapter(Duration.class, new DurationAdapter())
+                .setPrettyPrinting();
         return gsonBuilder.create();
     }
 }
