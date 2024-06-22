@@ -45,17 +45,15 @@ public class TaskHandler extends BaseHttpHandler {
                         throw new RuntimeException(e);
                     }
                     try {
-                        if (checkTaskOverlap(task)) {
+                        if (task.getId() == 0) {
+                            taskManager.create(task);
+                            sendText(exchange, "Задача добавлена", 201);
+                        } else {
                             taskManager.update(task);
                             sendText(exchange, "Задача обновлена", 201);
-                            break;
-                        } else
-                            taskManager.create(task);
-                        sendText(exchange, "Задача добавлена", 201);
-                        break;
+                        }
                     } catch (ValidationException e) {
                         sendText(exchange, "Задача пересекается с существующей", 406);
-                        break;
                     }
                 case HttpMethod.DELETE:
                     int id = getIdFromPath(exchange);
@@ -68,7 +66,7 @@ public class TaskHandler extends BaseHttpHandler {
                     }
                     break;
                 default:
-                    sendText(exchange, "Введен неверный запрос", 404);
+                    sendText(exchange, " METHOD_NOT_ALLOWED", 405);
                     break;
             }
         }

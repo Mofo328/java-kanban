@@ -131,7 +131,7 @@ public class HttpTaskServerTest {
         List<Epic> tasksFromManager = manager.getAllEpics();
         assertEquals(201, response.statusCode());
         assertNotNull(tasksFromManager, "Задачи не возвращаются");
-        assertEquals(2, tasksFromManager.size(), "Некорректное количество задач");
+        assertEquals(1, tasksFromManager.size(), "Некорректное количество задач");
         assertEquals("Имя 1", tasksFromManager.getFirst().getName(), "Некорректное имя задачи");
     }
 

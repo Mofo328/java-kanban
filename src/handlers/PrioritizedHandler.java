@@ -17,7 +17,7 @@ public class PrioritizedHandler extends BaseHttpHandler {
             if (exchange.getRequestMethod().equals(HttpMethod.GET)) {
                 sendText(exchange, getGson().toJson(taskManager.getPrioritizedTasks()), 200);
             } else
-                sendText(exchange, "Запрос не может быть обработан", 404);
+                sendText(exchange, "METHOD_NOT_ALLOWED", 405);
         }
     }
 }

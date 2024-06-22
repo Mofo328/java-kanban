@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-import model.Task;
 import service.TaskManager;
 
 import java.io.IOException;
@@ -56,15 +55,6 @@ public abstract class BaseHttpHandler implements HttpHandler {
     protected int getIdFromPath(HttpExchange exchange) {
         Optional<Integer> idFromPath = getId(exchange);
         return idFromPath.orElse(-1);
-    }
-
-    protected boolean checkTaskOverlap(Task newTask) {
-        for (Task existingTask : taskManager.getAll()) {
-            if (existingTask.getId() == newTask.getId()) {
-                return true;
-            }
-        }
-        return false;
     }
 
     public static Gson getGson() {

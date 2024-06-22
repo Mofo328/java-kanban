@@ -2,7 +2,6 @@ package handlers;
 
 import com.google.gson.JsonSyntaxException;
 import com.sun.net.httpserver.HttpExchange;
-import exceptions.ValidationException;
 import model.Epic;
 import network.HttpMethod;
 import service.TaskManager;
@@ -49,20 +48,14 @@ public class EpicHandler extends BaseHttpHandler {
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
-                    try {
-                        if (checkTaskOverlap(epic)) {
+                        if (epic.getId() == 0) {
+                            taskManager.createEpic(epic);
+                            sendText(exchange, "Задача добавлена", 201);
+                        } else {
                             taskManager.updateEpic(epic);
                             sendText(exchange, "Задача обновлена", 201);
-                            break;
-                        } else
-                            taskManager.createEpic(epic);
-                        sendText(exchange, "Задача добавлена", 201);
-                        break;
-                    } catch (ValidationException e) {
-                        sendText(exchange, "Задача пересекается с существующей", 406);
-                        break;
-                    }
-                case HttpMethod.DELETE:
+                        }
+                   case HttpMethod.DELETE:
                     int id = getIdFromPath(exchange);
                     if (id != -1) { // Если id из запроса не null
                         taskManager.removeEpicById(getIdFromPath(exchange));
@@ -73,7 +66,7 @@ public class EpicHandler extends BaseHttpHandler {
                     }
                     break;
                 default:
-                    sendText(exchange, "Введен неверный запрос", 404);
+                    sendText(exchange, "METHOD_NOT_ALLOWED", 405);
                     break;
             }
         }

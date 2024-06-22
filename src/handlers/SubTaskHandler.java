@@ -45,17 +45,15 @@ public class SubTaskHandler extends BaseHttpHandler {
                         sendText(exchange, "Internal Server Error", 500);
                     }
                     try {
-                        if (checkTaskOverlap(subTask)) {
+                        if (subTask.getId() == 0) {
+                            taskManager.createSubTask(subTask);
+                            sendText(exchange, "Задача добавлена", 201);
+                        } else {
                             taskManager.updateSubTask(subTask);
                             sendText(exchange, "Задача обновлена", 201);
-                            break;
-                        } else
-                            taskManager.createSubTask(subTask);
-                        sendText(exchange, "Задача добавлена", 201);
-                        break;
+                        }
                     } catch (ValidationException e) {
                         sendText(exchange, "Задача пересекается с существующей", 406);
-                        break;
                     }
                 case HttpMethod.DELETE:
                     int id = getIdFromPath(exchange);
@@ -68,7 +66,7 @@ public class SubTaskHandler extends BaseHttpHandler {
                     }
                     break;
                 default:
-                    sendText(exchange, "Введен неверный запрос", 404);
+                    sendText(exchange, "METHOD_NOT_ALLOWED", 405);
                     break;
             }
         }
